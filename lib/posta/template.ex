@@ -13,20 +13,18 @@ defmodule Posta.Template do
 
 
 if Code.loaded?(Swoosh.Email) do
-  use Swoosh.Email
-
   def to_swoosh_email(%__MODULE__{} = template) do
-    email = new()
-    |> subject(template.subject)
-    |> to(template.to)
-    |> from(template.from)
-    |> cc(template.cc)
-    |> bcc(template.bcc)
-    |> text_body(template.text_body)
-    |> html_body(template.html_body)
-    |> reply_to(template.reply_to)
+    email = Swoosh.Email.new()
+    |> Swoosh.Email.subject(template.subject)
+    |> Swoosh.Email.to(template.to)
+    |> Swoosh.Email.from(template.from)
+    |> Swoosh.Email.cc(template.cc)
+    |> Swoosh.Email.bcc(template.bcc)
+    |> Swoosh.Email.text_body(template.text_body)
+    |> Swoosh.Email.html_body(template.html_body)
+    |> Swoosh.Email.reply_to(template.reply_to)
 
-    Enum.reduce(template.attachments, email, fn att, email -> attachment(email, att) end)
+    Enum.reduce(template.attachments, email, fn attachment, email -> Swoosh.Email.attachment(email, attachment) end)
   end
 end
   
